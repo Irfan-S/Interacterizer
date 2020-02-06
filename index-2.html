@@ -1,0 +1,298 @@
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+        <title>Babylon - Getting Started</title>
+        <!-- Link to the last version of BabylonJS -->
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <!-- Link to the last version of BabylonJS loaders to enable loading filetypes such as .gltf -->
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+        <!-- Link to pep.js to ensure pointer events work consistently in all browsers -->
+        <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+        <style>
+            html,
+            body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <canvas id="renderCanvas"></canvas>
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                // All the following code is entered here.
+                var canvas = document.getElementById('renderCanvas');
+                var engine = new BABYLON.Engine(canvas, true);
+                // var createScene = function () {
+                //     // Create scene
+                //     var scene = new BABYLON.Scene(engine);
+                //     var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 4, Math.PI / 2.5, 10, BABYLON.Vector3.Zero(), scene);
+                //     camera.attachControl(canvas, true);
+                //     camera.minZ = 0.1;
+
+                //     // Initialize GizmoManager
+                //     var gizmoManager = new BABYLON.GizmoManager(scene)
+
+                //     // Initialize all gizmos
+                //     gizmoManager.boundingBoxGizmoEnabled = true;
+                //     gizmoManager.positionGizmoEnabled = true;
+                //     gizmoManager.rotationGizmoEnabled = true;
+                //     gizmoManager.scaleGizmoEnabled = true;
+
+                //     // Modify gizmos based on keypress
+                //     document.onkeydown = (e) => {
+                //         if (e.key == 'w' || e.key == 'e' || e.key == 'r' || e.key == 'q') {
+                //             // Switch gizmo type
+                //             gizmoManager.positionGizmoEnabled = false;
+                //             gizmoManager.rotationGizmoEnabled = false;
+                //             gizmoManager.scaleGizmoEnabled = false;
+                //             gizmoManager.boundingBoxGizmoEnabled = false;
+                //             if (e.key == 'w') {
+                //                 gizmoManager.positionGizmoEnabled = true;
+                //             }
+                //             if (e.key == 'e') {
+                //                 gizmoManager.rotationGizmoEnabled = true;
+                //             }
+                //             if (e.key == 'r') {
+                //                 gizmoManager.scaleGizmoEnabled = true;
+                //             }
+                //             if (e.key == 'q') {
+                //                 gizmoManager.boundingBoxGizmoEnabled = true;
+                //             }
+                //         }
+                //         if (e.key == 'y') {
+                //             // hide the gizmo
+                //             gizmoManager.attachToMesh(null);
+                //         }
+                //         if (e.key == 'a') {
+                //             // Toggle local/global gizmo rotation positioning
+                //             gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
+                //             gizmoManager.gizmos.rotationGizmo.updateGizmoRotationToMatchAttachedMesh = !gizmoManager.gizmos.rotationGizmo.updateGizmoRotationToMatchAttachedMesh;
+                //         }
+                //         if (e.key == 's') {
+                //             // Toggle distance snapping
+                //             if (gizmoManager.gizmos.scaleGizmo.snapDistance == 0) {
+                //                 gizmoManager.gizmos.scaleGizmo.snapDistance = 0.3;
+                //                 gizmoManager.gizmos.rotationGizmo.snapDistance = 0.3;
+                //                 gizmoManager.gizmos.positionGizmo.snapDistance = 0.3;
+                //             } else {
+                //                 gizmoManager.gizmos.scaleGizmo.snapDistance = 0;
+                //                 gizmoManager.gizmos.rotationGizmo.snapDistance = 0;
+                //                 gizmoManager.gizmos.positionGizmo.snapDistance = 0;
+                //             }
+                //         }
+                //         if (e.key == 'd') {
+                //             // Toggle gizmo size
+                //             if (gizmoManager.gizmos.scaleGizmo.scaleRatio == 1) {
+                //                 gizmoManager.gizmos.scaleGizmo.scaleRatio = 1.5;
+                //                 gizmoManager.gizmos.rotationGizmo.scaleRatio = 1.5;
+                //                 gizmoManager.gizmos.positionGizmo.scaleRatio = 1.5;
+                //             } else {
+                //                 gizmoManager.gizmos.scaleGizmo.scaleRatio = 1;
+                //                 gizmoManager.gizmos.rotationGizmo.scaleRatio = 1;
+                //                 gizmoManager.gizmos.positionGizmo.scaleRatio = 1;
+                //             }
+                //         }
+                //     }
+
+                //     // Start by only enabling position control
+                //     document.onkeydown({ key: "w" })
+
+                //     // Create objects
+                //     var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("textures/environment.dds", scene);
+                //     var hdrSkybox = BABYLON.Mesh.CreateBox("hdrSkyBox", 1000.0, scene);
+                //     hdrSkybox.isPickable = false;
+                //     var hdrSkyboxMaterial = new BABYLON.PBRMaterial("skyBox", scene);
+                //     hdrSkyboxMaterial.backFaceCulling = false;
+                //     hdrSkyboxMaterial.reflectionTexture = hdrTexture.clone();
+                //     hdrSkyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+                //     hdrSkyboxMaterial.microSurface = 1.0;
+                //     hdrSkyboxMaterial.disableLighting = true;
+                //     hdrSkybox.material = hdrSkyboxMaterial;
+                //     hdrSkybox.infiniteDistance = true;
+                //     var sphereGlass = BABYLON.Mesh.CreateSphere("sphereGlass", 48, 1.0, scene);
+                //     sphereGlass.translate(new BABYLON.Vector3(1, 0, 0), -3);
+                //     // var sphereMetal = BABYLON.Mesh.CreateSphere("sphereMetal", 48, 1.0, scene);
+                //     // sphereMetal.translate(new BABYLON.Vector3(1, 0, 0), 3);
+                //     // var spherePlastic = BABYLON.Mesh.CreateSphere("spherePlastic", 48, 1.0, scene);
+                //     // spherePlastic.translate(new BABYLON.Vector3(0, 0, 1), -3);
+                //     var woodPlank = BABYLON.MeshBuilder.CreateBox("plane", { width: 3, height: 0.1, depth: 3 }, scene);
+                //     var glass = new BABYLON.PBRMaterial("glass", scene);
+                //     glass.reflectionTexture = hdrTexture;
+                //     glass.refractionTexture = hdrTexture;
+                //     glass.linkRefractionWithTransparency = true;
+                //     glass.indexOfRefraction = 0.52;
+                //     glass.alpha = 0;
+                //     glass.microSurface = 1;
+                //     glass.reflectivityColor = new BABYLON.Color3(0.2, 0.2, 0.2);
+                //     glass.albedoColor = new BABYLON.Color3(0.85, 0.85, 0.85);
+                //     sphereGlass.material = glass;
+                //     // var metal = new BABYLON.PBRMaterial("metal", scene);
+                //     // metal.reflectionTexture = hdrTexture;
+                //     // metal.microSurface = 0.96;
+                //     // metal.reflectivityColor = new BABYLON.Color3(0.85, 0.85, 0.85);
+                //     // metal.albedoColor = new BABYLON.Color3(0.01, 0.01, 0.01);
+                //     // sphereMetal.material = metal;
+                //     // var plastic = new BABYLON.PBRMaterial("plastic", scene);
+                //     // plastic.reflectionTexture = hdrTexture;
+                //     // plastic.microSurface = 0.96;
+                //     // plastic.albedoColor = new BABYLON.Color3(0.206, 0.94, 1);
+                //     // plastic.reflectivityColor = new BABYLON.Color3(0.003, 0.003, 0.003);
+                //     // spherePlastic.material = plastic;
+                //     var wood = new BABYLON.PBRMaterial("wood", scene);
+                //     wood.reflectionTexture = hdrTexture;
+                //     wood.environmentIntensity = 1;
+                //     wood.specularIntensity = 0.3;
+                //     wood.reflectivityTexture = new BABYLON.Texture("textures/reflectivity.png", scene);
+                //     wood.useMicroSurfaceFromReflectivityMapAlpha = true;
+                //     wood.albedoColor = BABYLON.Color3.White();
+                //     wood.albedoTexture = new BABYLON.Texture("textures/albedo.png", scene);
+                //     woodPlank.material = wood;
+                //     return scene;
+                // };
+                // var createScene = function () {
+
+                //     // Create the scene space
+                //     var scene = new BABYLON.Scene(engine);
+
+                //     // Add a camera to the scene and attach it to the canvas
+                //     var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, BABYLON.Vector3.Zero(), scene);
+                //     camera.attachControl(canvas, true);
+
+                //     // Add lights to the scene
+                //     var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+                //     var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+
+                //     // Add and manipulate meshes in the scene
+                //     var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {}, scene);
+
+                //     return scene;
+
+                // };
+
+
+
+                var createScene = function () {
+
+                    // Create the scene space
+
+                    //THIS IS FOR A SLIDER TO INCREASE SIZE OF OBJECTS
+                    var scene = new BABYLON.Scene(engine);
+                    // BABYLON.SceneLoader.Append("./models", "atom.glb", scene, function (scene) {
+                    //     // do something with the scene
+                    //     // Create a default arc rotate camera and light.
+                    //     scene.createDefaultCameraOrLight(true, true, true);
+
+                    //     // The default camera looks at the back of the asset.
+                    //     // Rotate the camera by 180 degrees to the front of the asset.
+                    //     scene.activeCamera.alpha += Math.PI;
+                    // });
+
+                    // Add a camera to the scene and attach it to the canvas
+                    var camera = new BABYLON.ArcRotateCamera("Camera", 3 * Math.PI / 4, Math.PI / 4, 4, BABYLON.Vector3.Zero(), scene);
+                    camera.attachControl(canvas, true);
+
+                    // Add lights to the scene
+                    var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
+                    var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
+
+                    // Add and manipulate meshes in the scene
+                    var box = BABYLON.MeshBuilder.CreateBox("box", { height: 1, width: 0.75, depth: 0.25, updatable: true }, scene);
+
+
+                    box.scaling = new BABYLON.Vector3(4, 4, 4);
+                    var pbt = new PBT();
+                    var boxAboutX = function (angle) {
+                        box.rotation.x = angle;
+                    }
+                    var boxAboutX = function () {
+                        return box.scaling;
+                    }
+
+                    var updateLabelX = function (size) {
+                        box.scaling = new BABYLON.Vector3(size + 1, 4, 4);  //0 decimal places
+                    }
+
+                    var boxAboutY = function (angle) {
+                        box.rotation.y = angle;
+                    }
+
+                    var updateLabelY = function (angle) {
+                        return BABYLON.Tools.ToDegrees(angle) | 0;  //0 decimal places
+                    }
+
+                    var boxAboutZ = function (angle) {
+                        box.rotation.z = angle;
+                    }
+
+                    var updateLabelZ = function (angle) {
+                        return BABYLON.Tools.ToDegrees(angle) | 0;  //0 decimal places
+                    }
+                    var pbt = new PBT();
+
+                    var slid = new pbt.ButtonGroup("Angle", "S");
+                    slid.addSlider("X axis", boxAboutX, "degs", updateLabelX, 0, 2 * Math.PI, 0);
+                    slid.addSlider("Y axis", boxAboutY, "degs", updateLabelY, 0, 2 * Math.PI, 0);
+                    slid.addSlider("Z axis", boxAboutZ, "degs", updateLabelZ, 0, 2 * Math.PI, 0);
+
+                    var selector = new pbt.SelectionDialog({ groups: [slid] });
+
+                    return scene;
+
+                };
+
+                var scene = createScene();
+                engine.runRenderLoop(function () {
+                    scene.render();
+                });
+                window.addEventListener('resize', function () {
+                    engine.resize();
+                });
+            });
+            /**
+        var createScene = function() {
+    // Create a basic BJS Scene object.
+    var scene = new BABYLON.Scene(engine);
+
+    // Create a FreeCamera, and set its position to (x:0, y:5, z:-10).
+    var camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 5,-10), scene);
+
+    // Target the camera to scene origin.
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    // Attach the camera to the canvas.
+    camera.attachControl(canvas, false);
+
+    // Create a basic light, aiming 0,1,0 - meaning, to the sky.
+    var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
+
+    // Create a built-in "sphere" shape.
+    var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {segments:16, diameter:2}, scene);
+
+    // Move the sphere upward 1/2 of its height.
+    sphere.position.y = 1;
+
+    // Create a built-in "ground" shape.
+    var ground = BABYLON.MeshBuilder.CreateGround('ground1', {height:6, width:6, subdivisions: 2}, scene);
+
+    // Return the created scene.
+    return scene;
+}
+**/
+
+        </script>
+    </body>
+
+</html>

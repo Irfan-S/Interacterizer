@@ -1,14 +1,10 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
     <head>
-        <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
-        <title>Babylon - Getting Started</title>
-        <!-- Link to the last version of BabylonJS -->
-        <script src="https://preview.babylonjs.com/babylon.js"></script>
-        <!-- Link to the last version of BabylonJS loaders to enable loading filetypes such as .gltf -->
-        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-        <!-- Link to pep.js to ensure pointer events work consistently in all browsers -->
-        <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Babylon Template</title>
+
         <style>
             html,
             body {
@@ -25,82 +21,68 @@
                 touch-action: none;
             }
         </style>
+
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
     </head>
 
     <body>
 
-        <canvas id="renderCanvas"></canvas>
+        <canvas id="renderCanvas" touch-action="none"></canvas> //touch-action="none" for best results from PEP
+
         <script>
             window.addEventListener('DOMContentLoaded', function () {
-                // All the following code is entered here.
-                var canvas = document.getElementById('renderCanvas');
+                // get the canvas DOM element
+                var canvas = document.getElementById("renderCanvas");
                 var engine = new BABYLON.Engine(canvas, true);
 
+                // createScene function that creates and return the scene
                 var createScene = function () {
-
-                    // Create the scene space
                     var scene = new BABYLON.Scene(engine);
+                    // create a basic BJS Scene object
+                    var camera = new BABYLON.ArcRotateCamera("Camera", BABYLON.Tools.ToRadians(-120), BABYLON.Tools.ToRadians(80), 65, new BABYLON.Vector3(0, -15, 0), scene); camera.attachControl(canvas, false);
+                    var assetsManager = new BABYLON.AssetsManager(scene);
+                    var meshTask = assetsManager.addMeshTask("atom", "", "/", "atom.glb");
 
-                    // Add a camera to the scene and attach it to the canvas
-                    var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, BABYLON.Vector3.Zero(), scene);
-                    camera.attachControl(canvas, true);
+                    meshTask.onSuccess = function (task) {
+                        task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
+                    }
+                    meshTask.onError = function (task, message, exception) {
+                        console.log(message, exception);
+                    }
+                    assetsManager.onTaskErrorObservable.add(function (task) {
+                        console.log('task failed', task.errorObject.message, task.errorObject.exception);
+                    });
+                    assetsManager.onProgress = function (remainingCount, totalCount, lastFinishedTask) {
+                        engine.loadingUIText = 'We are loading the scene. ' + remainingCount + ' out of ' + totalCount + ' items still need to be loaded.';
+                    };
 
-                    // Add lights to the scene
-                    var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
-                    var light2 = new BABYLON.PointLight("light2", new BABYLON.Vector3(0, 1, -1), scene);
-
-                    // Add and manipulate meshes in the scene
-                    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {}, scene);
-
+                    assetsManager.onFinish = function (tasks) {
+                        engine.runRenderLoop(function () {
+                            scene.render();
+                        });
+                    };
+                    assetsManager.onTaskSuccessObservable.add(function (task) {
+                        console.log('task successful', task)
+                    });
+                    assetsManager.load();
                     return scene;
+                }
 
-                };
                 var scene = createScene();
                 engine.runRenderLoop(function () {
                     scene.render();
                 });
                 window.addEventListener('resize', function () {
                     engine.resize();
-                }); });
-            /**
-        var createScene = function() {
-    // Create a basic BJS Scene object.
-    var scene = new BABYLON.Scene(engine);
-
-    // Create a FreeCamera, and set its position to (x:0, y:5, z:-10).
-    var camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 5,-10), scene);
-
-    // Target the camera to scene origin.
-    camera.setTarget(BABYLON.Vector3.Zero());
-
-    // Attach the camera to the canvas.
-    camera.attachControl(canvas, false);
-
-    // Create a basic light, aiming 0,1,0 - meaning, to the sky.
-    var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
-
-    // Create a built-in "sphere" shape.
-    var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {segments:16, diameter:2}, scene);
-
-    // Move the sphere upward 1/2 of its height.
-    sphere.position.y = 1;
-
-    // Create a built-in "ground" shape.
-    var ground = BABYLON.MeshBuilder.CreateGround('ground1', {height:6, width:6, subdivisions: 2}, scene);
-
-    // Return the created scene.
-    return scene;
-}
-var scene = createScene();
-engine.runRenderLoop(function() {
-    scene.render();
-});
-window.addEventListener('resize', function() {
-    engine.resize();
-});
-        });**/
+                });
+            
+        });
 
         </script>
+
     </body>
 
 </html>
