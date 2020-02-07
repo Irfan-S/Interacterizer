@@ -1,123 +1,49 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Babylon Template</title>
-
-        <style>
-            html,
-            body {
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-
-            #renderCanvas {
-                width: 100%;
-                height: 100%;
-                touch-action: none;
-            }
-        </style>
-
-        <script src="https://cdn.babylonjs.com/babylon.js"></script>
-        <script src="https://preview.babylonjs.com/babylon.js"></script>
-        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
-        <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-    </head>
-
-    <body>
-
-        <canvas id="renderCanvas" touch-action="none"></canvas> //touch-action="none" for best results from PEP
-
-        <script>
-            window.addEventListener('DOMContentLoaded', function () {
-                var canvas = document.getElementById("renderCanvas");
-                     var engine = new BABYLON.Engine(canvas, true);
-                var createScene = function () {
-                    var scene = new BABYLON.Scene(engine);
-                    var camera = new BABYLON.ArcRotateCamera("arcCam",
-                        BABYLON.Tools.ToRadians(0),
-                        BABYLON.Tools.ToRadians(0),
-                        10.0,BABYLON.Vector3.Zero(),scene);
-                camera.attachControl(canvas,true);
-                var light = new BABYLON.PointLight("PointLight",new BABYLON.Vector3(
-                0,0,0),scene);
-                light.parent = camera;
-                light.intensity = 1.5;
-
-                    
-
-                    BABYLON.SceneLoader.ImportMesh("", "/", "atom2.glb", scene, function (meshes) {
-                        scene.createDefaultCameraOrLight(true, true, true);
-                        scene.createDefaultEnvironment();
-
-                    });
-
-                    return scene;
-                };
-                // get the canvas DOM element
-                //     var canvas = document.getElementById("renderCanvas");
-                //     var engine = new BABYLON.Engine(canvas, true);
-
-                //     // createScene function that creates and return the scene
-                //     var createScene = function () {
-                //         var scene = new BABYLON.Scene(engine);
-                //         // create a basic BJS Scene object
-                //         var camera = new BABYLON.ArcRotateCamera("arcCam",
-                //         BABYLON.Tools.ToRadians(0),
-                //         BABYLON.Tools.ToRadians(0),
-                //         10.0,BABYLON.Vector3.Zero(),scene);
-                // camera.attachControl(canvas,true);
-                // var light = new BABYLON.PointLight("PointLight",new BABYLON.Vector3(
-                // 0,0,0),scene);
-                // light.parent = camera;
-                // light.intensity = 1.5;
-                //         var assetsManager = new BABYLON.AssetsManager(scene);
-                //         var meshTask = assetsManager.addMeshTask("atom", "", "/", "atom2.glb");
-
-
-                //         meshTask.onSuccess = function (task) {
-                //             task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
-
-                //             //task.loadedMeshes[0].Vector3 = new BABYLON.Vector3(20,20,20);
-                //         }
-                //         meshTask.onError = function (task, message, exception) {
-                //             console.log(message, exception);
-                //         }
-                //         assetsManager.onTaskErrorObservable.add(function (task) {
-                //             console.log('task failed', task.errorObject.message, task.errorObject.exception);
-                //         });
-                //         assetsManager.onProgress = function (remainingCount, totalCount, lastFinishedTask) {
-                //             engine.loadingUIText = 'We are loading the scene. ' + remainingCount + ' out of ' + totalCount + ' items still need to be loaded.';
-                //         };
-
-                //         assetsManager.onFinish = function (tasks) {
-                //             engine.runRenderLoop(function () {
-                //                 scene.render();
-                //             });
-                //         };
-                //         assetsManager.onTaskSuccessObservable.add(function (task) {
-                //             console.log('task successful', task)
-                //         });
-                //         assetsManager.load();
-                //         return scene;
-                //     }
-
-                var scene = createScene();
-                engine.runRenderLoop(function () {
-                    scene.render();
-                });
-                window.addEventListener('resize', function () {
-                    engine.resize();
-                });
-
-            });
-
-        </script>
-
-    </body>
-
+<html>
+<head>
+  <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+      padding: 0 50px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    #localVideo {
+      max-width: calc(40% - 100px);
+      margin: 0 50px;
+      box-sizing: border-box;
+      border-radius: 2px;
+      padding: 0;
+      box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px, rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px, rgba(156, 172, 172, 0.2) 0px 16px 16px, rgba(156, 172, 172, 0.2) 0px 32px 32px, rgba(156, 172, 172, 0.2) 0px 64px 64px;
+    }
+	 #remoteVideo {
+      max-width: calc(40% - 100px);
+      margin: 0 50px;
+      box-sizing: border-box;
+      border-radius: 2px;
+      padding: 0;
+      box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px, rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px, rgba(156, 172, 172, 0.2) 0px 16px 16px, rgba(156, 172, 172, 0.2) 0px 32px 32px, rgba(156, 172, 172, 0.2) 0px 64px 64px;
+    }
+    .copy {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+   <div class="copy">Interacterizer</div>
+  <video id="localVideo" autoplay muted></video>
+  <video id="remoteVideo" autoplay></video>
+  <script src="script.js"></script>
+</body>
 </html>
