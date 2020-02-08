@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+    
+    <style>
+        body{
+            background-image: url('coverbg.png');
+            background-size: cover;                    
+            background-repeat: no-repeat;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+        }   
+        #box{
+            height: 100px;
+            width: 85%;
+            color:whitesmoke;
+            text-align: center; font-size: 40px;
+            margin: auto;
+            margin-top: 14%; padding-top: 32px;
+            opacity: 0; 
+            transition: opacity 5s;
+        }
+        #btn{
+            text-align: center; font-weight: bold;
+            height: 50px;
+            width: 150px;
+            opacity: 0.8;
+            border: 1px dotted black;
+        }
+        #signing{
+            display:inline-block;
+            margin-left: 90%;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body onload="document.getElementById('box').style.opacity = '1';">
+    <a href='ts.html' id='signing'>SignIn/SignUp</a>
+    <div id='box'>
+        WELCOME TO <span style='font-weight: bold; font-family: monospace; color: cornflowerblue;'>webIV</span> 
+        <br><span style='font-size: 28px;'>BUILD YOUR OWN INTERACTIVE & IMMERSIVE VIDEO FOR EDUCATION.</span>
+        <br><br><button id='btn'>KNOW MORE</button>
+    </div>
+    <script>
+        b = document.getElementById('btn').onclick = takeTo;
+        function takeTo(){
+
+        }
+    </script>
+</body>
